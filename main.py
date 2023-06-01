@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify, make_response, render_template
 from flask_scss import Scss
 import psycopg2
-from models import listify, listing
+from models import listify, listing, userProfile, companyProfile
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -25,7 +25,7 @@ cursor = conn.cursor()
 #     return render_('templates','homepage.html')
 
 @app.route('/', methods=['GET'])
-def hello():
+def homepage():
     return render_template('index.html')
 
 @app.route('/error404', methods=['GET'])
@@ -35,6 +35,10 @@ def error404():
 @app.route('/registerPelamar', methods=['GET'])
 def show_register_page():
     return render_template('registration.html')
+
+@app.route('/registrasiPerusahaan',methods = ['GET'])
+def show_registerCompany_page():
+    return render_template('registerCompany.html')
 
 @app.route('/loginPelamar', methods=['GET'])
 def show_login_page():
@@ -48,6 +52,17 @@ def show_jobdetail_page():
 def show_joblist_page():
     return render_template('job-list.html')
 
+@app.route('/category', methods = ['GET'])
+def show_category_page():
+    return render_template('category.html')
+
+@app.route('/about', methods = ['GET'])
+def show_about_page():
+    return render_template('about.html')
+
+@app.route('/contact', methods = ['GET'])
+def show_contact_page():
+    return render_template('contact.html')
 
 def checkColumn(columnName:str,tableName:str):
     query = f"SELECT column_name FROM information_schema.columns WHERE table_name = '{tableName}'"
@@ -90,7 +105,6 @@ def register():
             response = make_response(jsonify({'message': 'an error has ocuured', 'error': str(e),'success':False}))
             response.status_code=500
             return response
-    
 
 
 @app.route('/loginPelamar', methods=['POST'])
@@ -122,6 +136,7 @@ def login():
         response = make_response(jsonify({'message': 'an error has ocuured', 'error': str(e), 'success': False}))
         response.status_code=500
         return response
+
 
 #login dan registrasi perusahaan
 @app.route('/registrasiPerusahaan',methods = ['POST'])
@@ -233,11 +248,11 @@ def editPerusahaan():
         return response
 
 #nanti malem di test
-@app.route('/',methods=['POST'])
+@app.route('/searchJob',methods=['GET'])
 def searchJob():
-    data = request.get_json()
-    keySearch= data.get('key')   
-    dataSearch = data.get('data')
+    keySearch = request.args.get('key')
+    dataSearch = request.args.get('data')
+    print(keySearch+""+dataSearch)
     query = f"SELECT pekerjaan.id_pekerjaan, pekerjaan.posisi,pekerjaan.gaji,\
                             perusahaan.nama_perusahaan,kategori.nama_kategori \
                             FROM pekerjaan INNER JOIN perusahaan \
@@ -250,12 +265,14 @@ def searchJob():
         cursor.execute(query,(dataSearch,))
         joblist = cursor.fetchall()
         if joblist:
-            print(joblist)
+            #print(joblist)
             dictio = listify(joblist)
-            response = make_response(jsonify(dictio))
+            print(dictio.payload)
+            response = make_response(jsonify(dictio.__dict__))
             response.status_code=200
             return response
         else:
+            print("not found!")
             response = make_response(jsonify({'message': 'Pekerjaan dengan ' + keySearch + '=' +dataSearch+ \
                                                 ' sedang tidak tersedia','success':False }))
             response.status_code=404
@@ -269,17 +286,28 @@ def searchJob():
 #ini mungkin berubah
 @app.route('/getJobDetail', methods = ['GET'])
 def getJobDetail():
-    data = request.get_json()
-    jobId = data.get('id_pekerjaan')
-
+    # data = request.get_json()
+    # jobId = data.get('id_pekerjaan')
+    jobId = request.args.get('id_pekerjaan')
+    
+    query = f"SELECT pekerjaan.id_pekerjaan, pekerjaan.posisi, pekerjaan.deskripsi_pekerjaan,pekerjaan.kualifikasi,\
+                pekerjaan.gaji,perusahaan.nama_perusahaan,kategori.nama_kategori FROM pekerjaan\
+                INNER JOIN perusahaan ON pekerjaan.id_perusahaan = perusahaan.id_perusahaan\
+                INNER JOIN kategori ON pekerjaan.id_kategori = kategori.id_kategori WHERE id_pekerjaan = %s"
+#deskripsi,kualifikasi, nama_perusahaan, gaji
     try:
-        cursor.execute("SELECT deskripsi,kualifikasi FROM pekerjaan WHERE id_pekerjaan = %s",(jobId))   #ganti Query ini ntar
+        cursor.execute(query,(jobId))   #ganti Query ini ntar
         jobDetails = cursor.fetchone()
         if jobDetails:
             #print(jobDetails)
             dictio = {
-                'deskripsi': jobDetails[0],
-                'kualifikasi': jobDetails[1]
+                'id_pekerjaan': jobDetails[0],
+                'posisi': jobDetails[1],
+                'deskripsi_pekerjaan':jobDetails[2],
+                'kualifikasi':jobDetails[3],
+                'gaji':jobDetails[4],
+                'nama_perusahaan':jobDetails[5],
+                'nama_kategori':jobDetails[6]
             }
             dictio.update({'success':True})
             response = make_response(jsonify(dictio))
@@ -465,8 +493,7 @@ def removeLetter():
 
 @app.route('/getAllLetter',methods=['GET']) #yang pakai method ini adalah company
 def getAllLetter():
-    data = request.get_json()
-    id_perusahaan = data.get('id_perusahaan')
+    id_perusahaan = request.args.get('id_perusahaan')
     query = f"SELECT lamaran.id_lamaran,pekerjaan.posisi,pelamar.nama_pelamar\
             ,pelamar.pengalaman,pelamar.pendidikan, lamaran.tanggal FROM lamaran\
             INNER JOIN pekerjaan ON lamaran.id_pekerjaan=pekerjaan.id_pekerjaan\
@@ -476,9 +503,9 @@ def getAllLetter():
     try:
         cursor.execute(query,(id_perusahaan,))
         letterList = cursor.fetchall()
-        if letterList is not None:
+        if letterList:
             dictio = listing(letterList)
-            response = make_response(jsonify(dictio))
+            response = make_response(jsonify(dictio.__dict__))
             response.status_code=200
             return response
         else:
@@ -493,25 +520,27 @@ def getAllLetter():
 
 @app.route('/getLetterDetails' ,methods=['GET'])
 def letterDetail():
-    data = request.get_json()
-    letterId = data.get('id_lamaran')
-
+    letterId = request.args.get('id_lamaran')
+    query=f"SELECT lamaran.id_lamaran,pekerjaan.posisi,pelamar.nama_pelamar\
+            ,pelamar.pengalaman,pelamar.pendidikan, lamaran.tanggal FROM lamaran\
+            INNER JOIN pekerjaan ON lamaran.id_pekerjaan=pekerjaan.id_pekerjaan\
+            INNER JOIN pelamar ON lamaran.id_pelamar=pelamar.id_pelamar\
+            WHERE lamaran.id_lamaran = %s"
     try:
-        cursor.execute("SELECT * FROM lamaran WHERE id_lamaran = %s",(letterId))   #ganti Query ini ntar
+        cursor.execute(query,(letterId,))   #ganti Query ini ntar
         letterDetails = cursor.fetchone()
         if letterDetails:
             #print(jobDetails)
-            # dictio = {
-            #     'id_pekerjaan': jobDetails[0],
-            #     'id_perusahaan': jobDetails[1],
-            #     'id_kategori': jobDetails[2],
-            #     'posisi': jobDetails[3],
-            #     'deskripsi': jobDetails[4],
-            #     'kualifikasi': jobDetails[5],
-            #     'gaji': jobDetails[6]
-            # }
-            #dictio.update({'success':True})
-            response = make_response(jsonify(letterDetails))
+            dictio = {
+                'id_lamaran': letterDetails[0],
+                'posisi': letterDetails[1],
+                'nama_pelamar': letterDetails[2],
+                'pengalaman': letterDetails[3],
+                'pendidikan': letterDetails[4],
+                'tanggal': letterDetails[5]
+            }
+            dictio.update({'success':True})
+            response = make_response(jsonify(dictio))
             response.status_code=200
             return response
         else:
