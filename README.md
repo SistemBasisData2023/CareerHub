@@ -1,6 +1,6 @@
 # CareerHub - Portal Pencarian Pekerjaan Online
 
-CareerHub adalah sebuah aplikasi web yang dirancang untuk menjadi portal pencarian dan perekrutan pekerjaan secara online. Aplikasi ini dibangun menggunakan framework Django dengan bahasa pemrograman Python.
+CareerHub adalah sebuah aplikasi web yang dirancang untuk menjadi portal pencarian dan perekrutan pekerjaan secara online. Aplikasi ini dibangun menggunakan framework Flask dengan bahasa pemrograman Python.
 
 ## Tabel Database
 
