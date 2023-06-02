@@ -1,14 +1,20 @@
 document.getElementById("searchButton").addEventListener("click", searchData);
 
-function redirectToJobDetail(){
-    window.location.href="http://127.0.0.1:5000/getJobDetail";
+//function untuk me-load halaman 
+function redirectToJobDetail(id_pekerjaan) {
+  localStorage.setItem("id_pekerjaan", id_pekerjaan)
+  console.log(localStorage.getItem("id_pekerjaan"))
+  window.location.href = `http://127.0.0.1:5000/getJobDetail?id_pekerjaan=${id_pekerjaan}`;
+  //window.location.href=`http://127.0.0.1:5000/getJobDetail`
 }
 
 function searchData() {
+  //get input data from HTML elemen
   var searchKey = document.getElementById("searchKey").value;
   var searchData = document.getElementById("searchData").value;
   console.log(searchKey)
   
+  //set key request
   var requestData = {
     key: searchKey,
     data: searchData
@@ -24,15 +30,6 @@ function searchData() {
     }
   })
   .then(response => response.json())
-  // .then(response => {
-  //   if(response.status=200){
-  //     return response.json();
-  //   }
-  //   else if(response.status = 404){
-  //     console.log("fail at line 32")
-  //     window.location.href = "http://127.0.0.1:5000/error404";
-  //   }
-  // })
     .then(data => {
       var jobList = document.getElementById("jobList");
       jobList.innerHTML = "";
@@ -40,16 +37,9 @@ function searchData() {
         console.log("Success")
         //if(Array.isArray(data.data)){
           data.payload.forEach(jobItem => {
+            //localStorage.setItem("id_pekerjaan",jobItem.id_pekerjaan)
             var jobItemElement = document.createElement("div");
             jobItemElement.className = "job-item p-4 mb-4";
-            jobItemElement.addEventListener("click", function() {
-              // Fungsi yang akan dijalankan saat elemen daftar diklik
-              // Misalnya, tampilkan detail pekerjaan atau navigasi ke halaman detail
-              //add id_pekerjaan ke localStorage
-              localStorage.setItem("id_pekerjaan",jobItem.id_pekerjaan)
-              // redirectToJobDetail()
-            
-            });
             //title ganti posisi, location ganti nama_perusahaan, date atau time ganti jadi kategori
             var jobItemContent = `
             <div class="row g-4">
@@ -65,7 +55,7 @@ function searchData() {
               <div class="col-sm-12 col-md-4 d-flex flex-column align-items-start align-items-md-end justify-content-center">
                 <div class="d-flex mb-3">
                   <a class="btn btn-light btn-square me-3" href=""><i class="far fa-heart text-primary"></i></a>
-                  <a class="btn btn-primary" href="">Apply Now</a>
+                  <a class="btn btn-primary" href="#" onclick="redirectToJobDetail(${jobItem.id_pekerjaan})">Apply Now</a>
                 </div>
                 <small class="text-truncate"><i class="far fa-calendar-alt text-primary me-2"></i>Date Line: 01 Jan, 2045</small>
               </div>
@@ -84,7 +74,6 @@ function searchData() {
         console.log("fail at line 85")
         var message = data.success;
         console.log(message);
-        window.location.href = "http://127.0.0.1:5000/error404";
       }
     })
     .catch(error => {

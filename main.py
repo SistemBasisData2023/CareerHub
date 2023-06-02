@@ -46,6 +46,7 @@ def show_login_page():
 
 @app.route('/getJobDetail', methods = ['GET'])
 def show_jobdetail_page():
+    print("masuk")
     return render_template('job-detail.html')
 
 @app.route('/getJobList', methods = ['GET'])
@@ -105,6 +106,7 @@ def register():
             response = make_response(jsonify({'message': 'an error has ocuured', 'error': str(e),'success':False}))
             response.status_code=500
             return response
+    
 
 
 @app.route('/loginPelamar', methods=['POST'])
@@ -136,7 +138,6 @@ def login():
         response = make_response(jsonify({'message': 'an error has ocuured', 'error': str(e), 'success': False}))
         response.status_code=500
         return response
-
 
 #login dan registrasi perusahaan
 @app.route('/registrasiPerusahaan',methods = ['POST'])
@@ -284,22 +285,24 @@ def searchJob():
         return response
 
 #ini mungkin berubah
-@app.route('/getJobDetail', methods = ['GET'])
+@app.route('/getJobDetail', methods = ['POST'])
 def getJobDetail():
     # data = request.get_json()
     # jobId = data.get('id_pekerjaan')
     jobId = request.args.get('id_pekerjaan')
+    print(jobId)
     
     query = f"SELECT pekerjaan.id_pekerjaan, pekerjaan.posisi, pekerjaan.deskripsi_pekerjaan,pekerjaan.kualifikasi,\
-                pekerjaan.gaji,perusahaan.nama_perusahaan,kategori.nama_kategori FROM pekerjaan\
+              pekerjaan.gaji,perusahaan.nama_perusahaan,kategori.nama_kategori FROM pekerjaan\
                 INNER JOIN perusahaan ON pekerjaan.id_perusahaan = perusahaan.id_perusahaan\
                 INNER JOIN kategori ON pekerjaan.id_kategori = kategori.id_kategori WHERE id_pekerjaan = %s"
 #deskripsi,kualifikasi, nama_perusahaan, gaji
     try:
-        cursor.execute(query,(jobId))   #ganti Query ini ntar
+        cursor.execute(query,(jobId,))   #ganti Query ini ntar
         jobDetails = cursor.fetchone()
+        print(jobDetails)
         if jobDetails:
-            #print(jobDetails)
+            #print(jsonify(jobDetails))
             dictio = {
                 'id_pekerjaan': jobDetails[0],
                 'posisi': jobDetails[1],
@@ -310,6 +313,7 @@ def getJobDetail():
                 'nama_kategori':jobDetails[6]
             }
             dictio.update({'success':True})
+            print(dictio)
             response = make_response(jsonify(dictio))
             response.status_code=200
             return response
@@ -326,7 +330,8 @@ def getJobDetail():
 @app.route('/addJob',methods=['POST'])
 def addJob():
     data = request.get_json()
-    nama_perusahaan = data.get('nama_perusahaan') #ini dijadiin id_perusahaan ajah?
+    #ini dijadiin id_perusahaan ajah?,kalo iya, berarti id_perusahaan nya harus di save di localstorage
+    nama_perusahaan = data.get('nama_perusahaan') 
     kategori = data.get('kategori')  #ini dijadiin id_kategori ajah?
     posisi = data.get('posisi')
     deskripsi = data.get('deskripsi')
@@ -406,6 +411,7 @@ def editJob():
     datachange = data.get('data')
 
     if checkColumn(keychange,"pekerjaan"):
+        print("Valid Column")
         query = f"UPDATE pekerjaan SET {keychange} = %s WHERE id_pekerjaan = %s"
         try:
             cursor.execute(query,(datachange,id_pekerjaan))
@@ -421,6 +427,7 @@ def editJob():
             response.status_code=500
             return response
     else:
+        print("invalid column")
         response = make_response(jsonify({'message': 'invalid key','success':False}))
         response.status_code=404
         return response
@@ -623,6 +630,3 @@ def removeRating():
 ## Run The App
 if __name__ == '__main__':
     app.run(debug=True)
-
-
-

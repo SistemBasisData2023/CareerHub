@@ -3,8 +3,8 @@ function redirecttomain(){
 }
 
 function login() {
-  var email = document.getElementById("emailLoginPelamar").value;
-  var password = document.getElementById("pswdLoginPelamar").value;
+  var email = document.getElementById("email").value;
+  var password = document.getElementById("password").value;
 
   var formData = {
     email_pelamar: email,

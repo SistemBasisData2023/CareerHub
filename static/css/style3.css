@@ -16,6 +16,66 @@ body {
   background: url("/static/img/loginRegiser.png");
 }
 
+/* Navbar */
+.navbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  font-family: "Font Awesome 5 Free";
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 30px;
+  background-color: #fff;
+  z-index: 999;
+}
+
+.navbar .logo {
+  font-size: 24px;
+  font-weight: 600;
+  color: #00B074;
+}
+
+.navbar .menu-list {
+  display: flex;
+  list-style: none;
+  
+}
+
+.navbar .menu-list li {
+  margin-left: 20px;
+  
+}
+
+.navbar .menu-list li a {
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 500;
+  color: #2B3940;
+  transition: color 0.3s ease;
+}
+
+.navbar .menu-list li a:hover {
+  color: #00B074;
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+  .navbar .logo {
+    font-size: 20px;
+  }
+
+  .navbar .menu-list li {
+    margin-left: 15px;
+  }
+  
+  .navbar .menu-list li a {
+    font-size: 14px;
+  }
+}
+
+
 .container {
   max-width: 700px;
   width: 100%;
