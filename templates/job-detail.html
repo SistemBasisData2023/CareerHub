@@ -74,7 +74,7 @@
                     <a href="http://127.0.0.1:5000/loginPelamar" class="nav-item nav-link">Login</a>
                     <a href="http://127.0.0.1:5000/registerPelamar" class="nav-item nav-link">Register</a>
                 </div>
-                <a href="" class="btn btn-primary rounded-0 py-4 px-lg-5 d-none d-lg-block">Post A Job<i class="fa fa-arrow-right ms-3"></i></a>
+                <a href="http://127.0.0.1:5000/addJob" class="btn btn-primary rounded-0 py-4 px-lg-5 d-none d-lg-block">Post A Job<i class="fa fa-arrow-right ms-3"></i></a>
             </div>
         </nav>        
         <!-- Navbar End -->
@@ -136,7 +136,7 @@
     
                     <div class="">
                         <h4 class="mb-4">Apply For The Job</h4>
-                        <form>
+                        <form id="applicationForm">
                             <div class="row g-3">
                                 <div class="col-12 col-sm-6">
                                     <input type="text" class="form-control" placeholder="Your Name">
@@ -154,10 +154,15 @@
                                     <textarea class="form-control" rows="5" placeholder="Coverletter"></textarea>
                                 </div>
                                 <div class="col-12">
-                                    <button class="btn btn-primary w-100" type="submit">Apply Now</button>
+                                    <button id="applyButton" class="btn btn-primary w-100" type="submit">Apply Now</button>
                                 </div>
                             </div>
                         </form>
+                        <div id="applicationConfirmation">
+                            <p>Your application has been submitted.</p>
+                            <button id="deleteButton" class="btn btn-danger" type="button">Delete</button>
+                            <a id="deleteLink" href="#">Delete</a>
+                        </div>
                     </div>
                 </div>
     

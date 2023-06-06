@@ -1,11 +1,14 @@
 document.getElementById("searchButton").addEventListener("click", searchData);
+document.getElementById("logoutButton").addEventListener("click",clearLocalStorage);
+document.addEventListener('DOMContentLoaded',loadProfileName);
+
 
 //function untuk me-load halaman 
 function redirectToJobDetail(id_pekerjaan) {
   localStorage.setItem("id_pekerjaan", id_pekerjaan)
-  console.log(localStorage.getItem("id_pekerjaan"))
+  //console.log(localStorage.getItem("id_pekerjaan"))
   window.location.href = `http://127.0.0.1:5000/getJobDetail?id_pekerjaan=${id_pekerjaan}`;
-  //window.location.href=`http://127.0.0.1:5000/getJobDetail`
+ // window.location.href=`http://127.0.0.1:5000/getJobDetail`
 }
 
 function searchData() {
@@ -13,7 +16,7 @@ function searchData() {
   var searchKey = document.getElementById("searchKey").value;
   var searchData = document.getElementById("searchData").value;
   console.log(searchKey)
-  
+
   //set key request
   var requestData = {
     key: searchKey,
@@ -29,19 +32,19 @@ function searchData() {
       "Content-Type": "application/json"
     }
   })
-  .then(response => response.json())
+    .then(response => response.json())
     .then(data => {
       var jobList = document.getElementById("jobList");
       jobList.innerHTML = "";
       if (data.success) {
         console.log("Success")
         //if(Array.isArray(data.data)){
-          data.payload.forEach(jobItem => {
-            //localStorage.setItem("id_pekerjaan",jobItem.id_pekerjaan)
-            var jobItemElement = document.createElement("div");
-            jobItemElement.className = "job-item p-4 mb-4";
-            //title ganti posisi, location ganti nama_perusahaan, date atau time ganti jadi kategori
-            var jobItemContent = `
+        data.payload.forEach(jobItem => {
+          //localStorage.setItem("id_pekerjaan",jobItem.id_pekerjaan)
+          var jobItemElement = document.createElement("div");
+          jobItemElement.className = "job-item p-4 mb-4";
+          //title ganti posisi, location ganti nama_perusahaan, date atau time ganti jadi kategori
+          var jobItemContent = `
             <div class="row g-4">
               <div class="col-sm-12 col-md-8 d-flex align-items-center">
                 <img class="flex-shrink-0 img-fluid border rounded" src="/static/img/com-logo-1.jpg" alt="" style="width: 80px; height: 80px;">
@@ -61,15 +64,15 @@ function searchData() {
               </div>
             </div>
             `;
-            jobItemElement.innerHTML = jobItemContent;
-            jobList.appendChild(jobItemElement);
-          });
+          jobItemElement.innerHTML = jobItemContent;
+          jobList.appendChild(jobItemElement);
+        });
         //}
         // else{
         //   var message = data.message;
         //    console.log(message);
         // }  
-      } 
+      }
       else {
         console.log("fail at line 85")
         var message = data.success;
@@ -79,4 +82,47 @@ function searchData() {
     .catch(error => {
       console.error("Error:", error);
     });
+}
+
+function clearLocalStorage(){
+  if(localStorage.getItem("id_pelamar")){
+    localStorage.removeItem("id_pelamar")
+    localStorage.removeItem("nama_pelamar")
+    localStorage.removeItem("email_pelamar")
+    localStorage.removeItem("alamat_pelamar")
+    localStorage.removeItem("pengalaman")
+    localStorage.removeItem("pendidikan")
+    window.location.href = "http://127.0.0.1:5000/loginPelamar";
+  }
+  if(localStorage.getItem("id_perusahaan")){
+    //kosongkan isi localStorage
+  }
+}
+
+function loadProfileName(){
+  var username=localStorage.getItem("nama_pelamar")
+  if(username){
+    document.getElementById("username").textContent = username
+  }
+  else{
+    window.location.href="http://127.0.0.1:5000/loginPelamar";
+  }
+}
+
+function clearLocalStorage(){
+  if(localStorage.getItem("id_pelamar")){
+    localStorage.removeItem("id_pelamar")
+    localStorage.removeItem("nama_pelamar")
+    localStorage.removeItem("email_pelamar")
+    localStorage.removeItem("alamat_pelamar")
+    localStorage.removeItem("pengalaman")
+    localStorage.removeItem("pendidikan")
+    localStorage.removeItem("id_pekerjaan")
+    window.location.href = "http://127.0.0.1:5000/loginPelamar";
+  }
+  if(localStorage.getItem("id_perusahaan")){
+    //kosongkan isi localStorage
+  }
+
+  
 }

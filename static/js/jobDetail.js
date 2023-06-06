@@ -62,30 +62,35 @@ function displayJobDetail() {
                   </div>
   
                   <div class="">
-                    <h4 class="mb-4">Apply For The Job</h4>
-                    <form>
-                      <div class="row g-3">
-                        <div class="col-12 col-sm-6">
-                          <input type="text" class="form-control" placeholder="Your Name">
+                        <h4 class="mb-4">Apply For The Job</h4>
+                        <form id="applicationForm">
+                            <div class="row g-3">
+                                <div class="col-12 col-sm-6">
+                                    <input type="text" class="form-control" placeholder="Your Name">
+                                </div>
+                                <div class="col-12 col-sm-6">
+                                    <input type="email" class="form-control" placeholder="Your Email">
+                                </div>
+                                <div class="col-12 col-sm-6">
+                                    <input type="text" class="form-control" placeholder="Portfolio Website">
+                                </div>
+                                <div class="col-12 col-sm-6">
+                                    <input type="file" class="form-control bg-white">
+                                </div>
+                                <div class="col-12">
+                                    <textarea class="form-control" rows="5" placeholder="Coverletter"></textarea>
+                                </div>
+                                <div class="col-12">
+                                    <button id="applyButton" class="btn btn-primary w-100" type="submit">Apply Now</button>
+                                </div>
+                            </div>
+                        </form>
+                        <div id="applicationConfirmation">
+                            <p>Your application has been submitted.</p>
+                            <button id="deleteButton" class="btn btn-danger" type="button">Delete</button>
+                            <a id="deleteLink" href="#">Delete</a>
                         </div>
-                        <div class="col-12 col-sm-6">
-                          <input type="email" class="form-control" placeholder="Your Email">
-                        </div>
-                        <div class="col-12 col-sm-6">
-                          <input type="text" class="form-control" placeholder="Portfolio Website">
-                        </div>
-                        <div class="col-12 col-sm-6">
-                          <input type="file" class="form-control bg-white">
-                        </div>
-                        <div class="col-12">
-                          <textarea class="form-control" rows="5" placeholder="Coverletter"></textarea>
-                        </div>
-                        <div class="col-12">
-                          <button class="btn btn-primary w-100" type="submit">Apply Now</button>
-                        </div>
-                      </div>
-                    </form>
-                  </div>
+                    </div>
                 </div>
   
                 <div class="col-lg-4">
@@ -100,13 +105,13 @@ function displayJobDetail() {
                   </div>
                   <div class="bg-light rounded p-5 wow slideInUp" data-wow-delay="0.1s">
                     <h4 class="mb-4">Company Detail</h4>
-                    <p class="m-0">${data.company_description}</p>
+                    <p class="m-0">${data.deskripsi_perusahaan}</p>
                   </div>
                 </div>
               </div>
-            </div>
+            </div>            
           `;
-          localStorage.removeItem("id_pekerjaan");
+          // localStorage.removeItem("id_pekerjaan");
   
         } else {
           console.log("fail at line 85");
@@ -118,3 +123,26 @@ function displayJobDetail() {
         console.error("Error:", error);
       });
   }
+
+document.getElementById('applyButton').addEventListener('click', function(e) {
+    e.preventDefault();
+    document.getElementById('applicationForm').classList.add('hide');
+    document.getElementById('applicationConfirmation').classList.add('show');
+    document.getElementById('deleteButton').classList.add('show');
+    document.getElementById('deleteLink').classList.add('show');
+});
+
+document.getElementById('deleteButton').addEventListener('click', function() {
+    document.getElementById('applicationForm').classList.remove('hide');
+    document.getElementById('applicationConfirmation').classList.remove('show');
+    document.getElementById('deleteButton').classList.remove('show');
+    document.getElementById('deleteLink').classList.remove('show');
+});
+
+document.getElementById('deleteLink').addEventListener('click', function(e) {
+    e.preventDefault();
+    document.getElementById('applicationForm').classList.remove('hide');
+    document.getElementById('applicationConfirmation').classList.remove('show');
+    document.getElementById('deleteButton').classList.remove('show');
+    document.getElementById('deleteLink').classList.remove('show');
+});
