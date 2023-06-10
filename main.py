@@ -36,6 +36,10 @@ def companyHomepage():
 def error404():
     return render_template('404.html')
 
+@app.route('/userprofile', methods=['GET'])
+def show_profile_page():
+    return render_template('user-detail.html')
+
 @app.route('/registerPelamar', methods=['GET'])
 def show_register_page():
     return render_template('registration.html')
@@ -68,6 +72,10 @@ def show_addJob_page():
 @app.route('/category', methods = ['GET'])
 def show_category_page():
     return render_template('category.html')
+
+@app.route('/testimonial', methods=['GET'])
+def show_testimonial_page():
+    return render_template('testimonial.html')
 
 @app.route('/about', methods = ['GET'])
 def show_about_page():
@@ -340,7 +348,7 @@ def getJobDetail():
         response.status_code=500
         return response
     
-@app.route('/getJobByCompany',methods=['GET'])
+@app.route('/companyList',methods=['GET'])
 def getJobByCompany():
     companyId = request.args.get('id_perusahaan')
     print(companyId)
@@ -350,7 +358,7 @@ def getJobByCompany():
                             ON pekerjaan.id_perusahaan = perusahaan.id_perusahaan \
                             INNER JOIN kategori \
                             ON pekerjaan.id_kategori = kategori.id_kategori \
-                            WHERE id_perusahaan = %s"
+                            WHERE pekerjaan.id_perusahaan = %s"
     
     try:
         cursor.execute(query,(companyId,))
@@ -358,7 +366,7 @@ def getJobByCompany():
         if joblist:
             #print(joblist)
             dictio = listify(joblist)
-            print(dictio.payload)
+            print(dictio.__dict__)
             response = make_response(jsonify(dictio.__dict__))
             response.status_code=200
             return response
@@ -378,7 +386,7 @@ def addJob():
     data = request.get_json()
     #ini dijadiin id_perusahaan ajah?,kalo iya, berarti id_perusahaan nya harus di save di localstorage
     id_perusahaan = data.get('id_perusahaan') 
-    id_kategori = data.get('kategori')  #ini dijadiin id_kategori ajah?
+    id_kategori = data.get('id_kategori')  #ini dijadiin id_kategori ajah?
     posisi = data.get('posisi')
     deskripsi = data.get('deskripsi')
     kualifikasi = data.get('kualifikasi')
@@ -646,6 +654,28 @@ def removeRating():
     except Exception as e: # ini dijadiin error code 500?
         print(str(e))
         response = make_response(jsonify({'message': 'an error has occured', 'error': str(e),'success':False}))
+        response.status_code=500
+        return response
+
+@app.route('/changePass',methods=['PUT'])
+def changePass():
+    data = request.get_json()
+    id_pelamar = data.get('id_pelamar')
+    oldPass =  data.get('oldPassword')
+    newPass = data.get('newPassword')
+    query=f"UPDATE pelamar SET password = %s WHERE id_pelamar = %s AND password = %s"
+
+    try:
+        cursor.execute(query,(newPass,id_pelamar,oldPass))
+        conn.commit()
+        dictio = {'message':'Password berhasil diubah', 'success':True}
+        response = make_response(jsonify(dictio))
+        response.status_code=200
+        return response
+    except Exception as e: # ini dijadiin error code 500?
+        conn.rollback()
+        print(str(e))
+        response = make_response(jsonify({'message': 'an error has ocuured', 'error': str(e),'success':False}))
         response.status_code=500
         return response
 

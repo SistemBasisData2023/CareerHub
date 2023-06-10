@@ -1,7 +1,4 @@
 document.getElementById("searchButton").addEventListener("click", searchData);
-document.getElementById("logoutButton").addEventListener("click",clearLocalStorage);
-document.addEventListener('DOMContentLoaded',loadProfileName);
-
 
 //function untuk me-load halaman 
 function redirectToJobDetail(id_pekerjaan) {
@@ -84,45 +81,3 @@ function searchData() {
     });
 }
 
-function clearLocalStorage(){
-  if(localStorage.getItem("id_pelamar")){
-    localStorage.removeItem("id_pelamar")
-    localStorage.removeItem("nama_pelamar")
-    localStorage.removeItem("email_pelamar")
-    localStorage.removeItem("alamat_pelamar")
-    localStorage.removeItem("pengalaman")
-    localStorage.removeItem("pendidikan")
-    window.location.href = "http://127.0.0.1:5000/loginPelamar";
-  }
-  if(localStorage.getItem("id_perusahaan")){
-    //kosongkan isi localStorage
-  }
-}
-
-function loadProfileName(){
-  var username=localStorage.getItem("nama_pelamar")
-  if(username){
-    document.getElementById("username").textContent = username
-  }
-  else{
-    window.location.href="http://127.0.0.1:5000/loginPelamar";
-  }
-}
-
-function clearLocalStorage(){
-  if(localStorage.getItem("id_pelamar")){
-    localStorage.removeItem("id_pelamar")
-    localStorage.removeItem("nama_pelamar")
-    localStorage.removeItem("email_pelamar")
-    localStorage.removeItem("alamat_pelamar")
-    localStorage.removeItem("pengalaman")
-    localStorage.removeItem("pendidikan")
-    localStorage.removeItem("id_pekerjaan")
-    window.location.href = "http://127.0.0.1:5000/loginPelamar";
-  }
-  if(localStorage.getItem("id_perusahaan")){
-    //kosongkan isi localStorage
-  }
-
-  
-}

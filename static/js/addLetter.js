@@ -1,16 +1,18 @@
 //Save As addLetter.js
-document.getElementById("applyJobButton").addEventListener("click",applyJob);
+document.getElementById("applyButton").addEventListener("click",applyJob);
 //document.getElementById("editLetterButton").addEventListener("click",editLetter);
-document.getElementById("deleteLetterButton").addEventListener("click",deleteLetter);
+document.getElementById("delete").addEventListener("click",deleteLetter);
 
 function applyJob(){
     //get data: tanggal and filename from HTML
-    var id_pekerjaan = localStorage.getItem("id_pekerjaan")
+    var id_pekerjaan = localStorage.getItem("id_pekerjaan");
+    var id_pelamar = localStorage.getItem("id_pelamar");
     var tanggal = document.getElementById("tanggal").value;
     var filename = document.getElementById("filename").value;
 
     const reqData={
         id_pekerjaan:id_pekerjaan,
+        id_pelamar:id_pelamar,
         tanggal:tanggal,
         filename:filename
     };
@@ -25,7 +27,7 @@ function applyJob(){
     .then(response => response.json())
     .then(data=>{
         if(data.success){
-            document.getElementById("applyJobButton").style.visibility="hidden";
+            document.getElementById("applyButton").style.visibility="hidden";
             //unhide tombol edit dan delete?
             //document.getElementById("edit").style.visibility="visible";  //untuk style.displat: none untuk hide, block untuk unhide
             document.getElementById("delete").style.visibility="visible";

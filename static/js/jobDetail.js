@@ -1,6 +1,11 @@
 document.addEventListener('DOMContentLoaded', function() {
   displayJobDetail();
+
+  setTimeout(function() {
+    document.getElementById("delete").style.visibility = "hidden";
+  }, 100); // Menunda pengaturan visibilitas selama 1 detik (1000 milidetik)
 });
+
 
 
 //save As jobDetail.js
@@ -52,13 +57,13 @@ function displayJobDetail() {
   
                   <div class="mb-5">
                     <h4 class="mb-3">Job description</h4>
-                    <p>lorem</p>
+                    <p>${data.deskripsi_pekerjaan}</p>
   
                     <h4 class="mb-3">Responsibility</h4>
                     <p>lorem</p>
   
                     <h4 class="mb-3">Qualifications</h4>
-                    <p>lorem</p>
+                    <p>${data.kualifikasi}</p>
                   </div>
   
                   <div class="">
@@ -66,30 +71,20 @@ function displayJobDetail() {
                         <form id="applicationForm">
                             <div class="row g-3">
                                 <div class="col-12 col-sm-6">
-                                    <input type="text" class="form-control" placeholder="Your Name">
+                                  <input type="text" id="tanggal" class="form-control" placeholder="Tanggal">
                                 </div>
                                 <div class="col-12 col-sm-6">
-                                    <input type="email" class="form-control" placeholder="Your Email">
-                                </div>
-                                <div class="col-12 col-sm-6">
-                                    <input type="text" class="form-control" placeholder="Portfolio Website">
-                                </div>
-                                <div class="col-12 col-sm-6">
-                                    <input type="file" class="form-control bg-white">
-                                </div>
-                                <div class="col-12">
-                                    <textarea class="form-control" rows="5" placeholder="Coverletter"></textarea>
+                                    <input type="text" id="filename" class="form-control" placeholder="Filename">
                                 </div>
                                 <div class="col-12">
                                     <button id="applyButton" class="btn btn-primary w-100" type="submit">Apply Now</button>
                                 </div>
+                                <div class="col-12">
+                                    <button id="delete" class="btn btn-primary w-100" type="submit">Delete</button>
+                                </div>
                             </div>
                         </form>
-                        <div id="applicationConfirmation">
-                            <p>Your application has been submitted.</p>
-                            <button id="deleteButton" class="btn btn-danger" type="button">Delete</button>
-                            <a id="deleteLink" href="#">Delete</a>
-                        </div>
+                        
                     </div>
                 </div>
   
@@ -123,26 +118,3 @@ function displayJobDetail() {
         console.error("Error:", error);
       });
   }
-
-document.getElementById('applyButton').addEventListener('click', function(e) {
-    e.preventDefault();
-    document.getElementById('applicationForm').classList.add('hide');
-    document.getElementById('applicationConfirmation').classList.add('show');
-    document.getElementById('deleteButton').classList.add('show');
-    document.getElementById('deleteLink').classList.add('show');
-});
-
-document.getElementById('deleteButton').addEventListener('click', function() {
-    document.getElementById('applicationForm').classList.remove('hide');
-    document.getElementById('applicationConfirmation').classList.remove('show');
-    document.getElementById('deleteButton').classList.remove('show');
-    document.getElementById('deleteLink').classList.remove('show');
-});
-
-document.getElementById('deleteLink').addEventListener('click', function(e) {
-    e.preventDefault();
-    document.getElementById('applicationForm').classList.remove('hide');
-    document.getElementById('applicationConfirmation').classList.remove('show');
-    document.getElementById('deleteButton').classList.remove('show');
-    document.getElementById('deleteLink').classList.remove('show');
-});
