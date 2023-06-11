@@ -301,6 +301,7 @@ def getJobDetail():
     # data = request.get_json()
     # jobId = data.get('id_pekerjaan')
     jobId = request.args.get('id_pekerjaan')
+    userId =  request.args.get('id_pelamar')
     print(jobId)
     
     query = f"SELECT pekerjaan.id_pekerjaan, pekerjaan.posisi, pekerjaan.deskripsi_pekerjaan,pekerjaan.kualifikasi,\
@@ -315,6 +316,23 @@ def getJobDetail():
         print(jobDetails)
         if jobDetails:
             print(jsonify(jobDetails))
+            try:
+                cursor.execute("SELECT id_lamaran,tanggal_lamaran,filename FROM lamaran WHERE id_pekerjaan = %s and id_pelamar = %s",(jobId,userId))
+                letter = cursor.fetchone()
+                if letter:
+                    innerdict = {
+                        'id_lamaran':letter[0],
+                        'tanggal_lamaran': letter[1],
+                        'filename':letter[2]
+                    }
+                else:
+                    innerdict = None
+            except Exception as e: # ini dijadiin error code 500?
+                print(str(e))
+                response = make_response(jsonify({'message': 'an error has ocuured', 'error': str(e),'success': False}))
+                response.status_code=500
+                return response
+            
             dictio = {
                 'id_pekerjaan': jobDetails[0],
                 'posisi': jobDetails[1],
@@ -323,8 +341,9 @@ def getJobDetail():
                 'gaji':jobDetails[4],
                 'nama_perusahaan':jobDetails[5],
                 'nama_kategori':jobDetails[6],
-                'deskripsi_perusahaan':jobDetails[7]
+                'deskripsi_perusahaan':jobDetails[7]    
             }
+            dictio.update(innerdict)
             dictio.update({'success':True})
             print(dictio)
             response = make_response(jsonify(dictio))

@@ -11,10 +11,12 @@ Proyek ini dibuat oleh kelompok I9 dari Praktikum Sistem Basis Data yang terdiri
 ```
 Sebagai tugas pemrograman akhir pada Semester Genap 2021/2022 untuk mata kuliah Sistem Basis Data + Lab. (ENCE604016) dalam program studi Sarjana Teknik Komputer, Departemen Teknik Elektro, Fakultas Teknik, Universitas Indonesia.
 
-## Fitur-Fitur
-```
-Berikut adalah fitur-fitur yang disediakan oleh CareerHub:
+---
 
+## Fitur-Fitur
+
+Berikut adalah fitur-fitur yang disediakan oleh CareerHub:
+```
 - Registrasi dan login pengguna (pelamar)
 - Perusahaan dapat mempublikasikan pekerjaan yang tersedia
 - Pencarian pekerjaan berdasarkan posisi, perusahaan, atau kategori pekerjaan
@@ -25,6 +27,7 @@ Berikut adalah fitur-fitur yang disediakan oleh CareerHub:
 - Melihat riwayat lamaran dan statusnya
 ```
 
+---
 ## Tabel Database
 
 Proyek ini menggunakan basis data PostgreSQL dengan beberapa tabel yang digunakan:
@@ -80,13 +83,41 @@ Proyek ini menggunakan basis data PostgreSQL dengan beberapa tabel yang digunaka
 - rating (integer): Rating yang diberikan (skala 1-5)
 - komentar (string): Komentar terkait pekerjaan
 ```
+---
 
-## Kelengkapan Proyek
+## Relation Table and UML Diagram View
+<details>
+  <summary>Relation Table and UML Diagram View:</summary>
 
-Proyek CareerHub menyediakan beberapa kelengkapan sebagai bagian dari proyek akhir:
-```
-1. ```Skenario aplikasi```
-2. ```Diagram UML```
-3. ```Flowchart```
-4. ```ERD (Entity Relationship Diagram)```
-```
+  ```ERD:```
+
+![alt text](![ERD](https://github.com/SistemBasisData2023/CareerHub/assets/88435892/abd1858d-c9b4-406e-b24e-67913c36553b)
+)
+
+```UML:```
+
+![alt text](![UML](https://github.com/SistemBasisData2023/CareerHub/assets/88435892/b446a6c1-1d5b-409b-8084-68b8bdeed5a1))
+
+</details>
+
+## User and Admin Flowchart View
+<details>
+  <summary>User and Admin Flowchart View:</summary>
+
+  ```Flowchart of User```
+
+![alt text](![flowchart_user](https://github.com/SistemBasisData2023/CareerHub/assets/88435892/cb1f3459-8ae7-4df8-bb21-1c9d6bfd8905))
+
+```Flowchart of Company```
+
+![alt text](![flowchart_company](https://github.com/SistemBasisData2023/CareerHub/assets/88435892/0f050644-8d36-45bd-9f8b-63a96dc11eb3))
+
+</details>
+
+
+---
+```Logo CareerHub```
+![alt text](![logoCareerHub](https://github.com/SistemBasisData2023/CareerHub/assets/88435892/421ad99e-9f24-4c4f-a8d8-617a3dd79e13)
+)
+
+---
