@@ -16,13 +16,9 @@ conn = psycopg2.connect(
     port=5432 #
     #sslmode = True
 )
+
+# cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor, cursor_timeout=600)
 cursor = conn.cursor()
-
-### bikin route edit profile?
-
-# @app.route('/',methods=['GET'])
-# def hello():
-#     return render_('templates','homepage.html')
 
 @app.route('/', methods=['GET'])
 def homepage():
@@ -39,6 +35,10 @@ def error404():
 @app.route('/userprofile', methods=['GET'])
 def show_profile_page():
     return render_template('user-detail.html')
+
+@app.route('/companyprofile', methods=['GET'])
+def show_com_profile_page():
+    return render_template('company-detail.html')
 
 @app.route('/registerPelamar', methods=['GET'])
 def show_register_page():
@@ -58,7 +58,6 @@ def show_loginCompany_page():
 
 @app.route('/getJobDetail', methods = ['GET'])
 def show_jobdetail_page():
-    print("masuk")
     return render_template('job-detail.html')
 
 @app.route('/getJobList', methods = ['GET'])
@@ -214,58 +213,51 @@ def loginPerusahaan():
         response.status_code=500
         return response
 
-@app.route('/editPelamar',methods=['PUT'])
+@app.route('/editPelamar', methods=['PUT'])
 def editPelamar():
     data = request.get_json()
     id_pelamar = data.get('id_pelamar')
-    keychange = data.get('key')
-    datachange = data.get('data')
-
-    if checkColumn(keychange,"pelamar"):
-        query = f"UPDATE pelamar SET {keychange} = %s WHERE id_pelamar = %s"
-        try:
-            cursor.execute(query,(datachange,id_pelamar))
-            conn.commit()
-            dictio = {'message':'Profil pengguna telah diupdate', 'success':True}
-            response = make_response(jsonify(dictio))
-            response.status_code=200
-            return response
-        except Exception as e: # ini dijadiin error code 500?
-            conn.rollback()
-            print(str(e))
-            response = make_response(jsonify({'message': 'an error has ocuured', 'error': str(e),'success':False}))
-            response.status_code=500
-            return response
-    else:
-        response = make_response(jsonify({'message': 'invalid key','success':False}))
-        response.status_code=404
+    nama_pelamar = data.get('nama_pelamar')
+    email_pelamar = data.get('email_pelamar')
+    alamat_pelamar = data.get('alamat_pelamar')
+    pendidikan = data.get('pendidikan')
+    pengalaman = data.get("pengalaman")
+    try:
+        cursor.execute("UPDATE pelamar SET nama_pelamar = %s,email_pelamar=%s,\
+                        alamat_pelamar = %s, pendidikan = %s, pengalaman = %s \
+                        WHERE id_pelamar = %s",(nama_pelamar,email_pelamar,alamat_pelamar,pendidikan,pengalaman,id_pelamar))
+        conn.commit()
+        dictio = {'message':'Profile berhasil diubah', 'success':True}
+        response = make_response(jsonify(dictio))
+        response.status_code=200
         return response
+    except Exception as e:
+        conn.rollback()
+        print(str(e))
+        response = make_respons
 
 @app.route('/editPerusahaan',methods=['PUT'])
 def editPerusahaan():
     data = request.get_json()
     id_perusahaan = data.get('id_perusahaan')
-    keychange = data.get('key')
-    datachange = data.get('data')
-
-    if checkColumn(keychange,"perusahaan"):
-        query = f"UPDATE perusahaan SET {keychange} = %s WHERE id_perusahaan = %s"
-        try:
-            cursor.execute(query,(datachange,id_perusahaan))
-            conn.commit()
-            dictio = {'message':'Job  telah diupdate', 'success':True}
-            response = make_response(jsonify(dictio))
-            response.status_code=200
-            return response
-        except Exception as e: # ini dijadiin error code 500?
-            conn.rollback()
-            print(str(e))
-            response = make_response(jsonify({'message': 'an error has ocuured', 'error': str(e),'success':False}))
-            response.status_code=500
-            return response
-    else:
-        response = make_response(jsonify({'message': 'invalid key','success':False}))
-        response.status_code=404
+    nama_perusahaan = data.get('nama_perusahaan')
+    email_perusahaan = data.get('email_perusahaan')
+    alamat_perusahaan = data.get('alamat_perusahaan')
+    deskripsi_perusahaan = data.get('deskripsi_perusahaan')
+    try:
+        cursor.execute("UPDATE perusahaan SET nama_perusahaan = %s,email_perusahaan=%s,\
+                       alamat_perusahaan = %s, deskripsi_perusahaan = %s \
+                       WHERE id_perusahaan = %s",(nama_perusahaan,email_perusahaan,alamat_perusahaan,deskripsi_perusahaan,id_perusahaan))
+        conn.commit()
+        dictio = {'message':'Profile berhasil diubah', 'success':True}
+        response = make_response(jsonify(dictio))
+        response.status_code=200
+        return response
+    except Exception as e:
+        conn.rollback()
+        print(str(e))
+        response = make_response(jsonify({'message': 'an error has ocuured', 'error': str(e),'success':False}))
+        response.status_code=500
         return response
 
 #nanti malem di test
@@ -657,12 +649,12 @@ def removeRating():
         response.status_code=500
         return response
 
-@app.route('/changePass',methods=['PUT'])
-def changePass():
+@app.route('/changePassUser',methods=['PUT'])
+def changePassUser():
     data = request.get_json()
     id_pelamar = data.get('id_pelamar')
-    oldPass =  data.get('oldPassword')
-    newPass = data.get('newPassword')
+    oldPass =  data.get('oldPass')
+    newPass = data.get('newPass')
     query=f"UPDATE pelamar SET password = %s WHERE id_pelamar = %s AND password = %s"
 
     try:
@@ -678,6 +670,107 @@ def changePass():
         response = make_response(jsonify({'message': 'an error has ocuured', 'error': str(e),'success':False}))
         response.status_code=500
         return response
+
+@app.route('/changePassCompany',methods=['PUT'])
+def changePassCompany():
+    data = request.get_json()
+    id_perusahaan = data.get('id_perusahaan')
+    oldPass =  data.get('oldPass')
+    newPass = data.get('newPass')
+    query=f"UPDATE perusahaan SET password = %s WHERE id_perusahaan = %s AND password = %s"
+
+    try:
+        cursor.execute(query,(newPass,id_perusahaan,oldPass))
+        conn.commit()
+        dictio = {'message':'Password berhasil diubah', 'success':True}
+        response = make_response(jsonify(dictio))
+        response.status_code=200
+        return response
+    except Exception as e: # ini dijadiin error code 500?
+        conn.rollback()
+        print(str(e))
+        response = make_response(jsonify({'message': 'an error has ocuured', 'error': str(e),'success':False}))
+        response.status_code=500
+        return response
+
+
+@app.route('/defaultjobList',methods=['GET'])
+def defaultList():
+    try:
+        cursor.execute("SELECT pekerjaan.id_pekerjaan, pekerjaan.posisi,pekerjaan.gaji,\
+                            perusahaan.nama_perusahaan,kategori.nama_kategori \
+                            FROM pekerjaan INNER JOIN perusahaan \
+                            ON pekerjaan.id_perusahaan = perusahaan.id_perusahaan \
+                            INNER JOIN kategori \
+                            ON pekerjaan.id_kategori = kategori.id_kategori \
+                            ORDER BY pekerjaan.gaji LIMIT 10 ")
+        joblist = cursor.fetchall()
+        if joblist:
+            #print(joblist)
+            dictio = listify(joblist)
+            print(dictio.payload)
+            response = make_response(jsonify(dictio.__dict__))
+            response.status_code=200
+            return response
+        else:
+            print("not found!")
+            response = make_response(jsonify({'message': 'Null ' ,'success':False }))
+            response.status_code=404
+            return response
+    except Exception as e:
+        print(str(e))
+        response = make_response(jsonify({'message': 'an error has ocuured', 'error': str(e),'success':False}))
+        response.status_code=500
+        return response
+
+@app.route('/getprofileById',methods=['GET'])
+def getProfileById():
+    userId = request.args.get('id_pelamar')
+    try:
+        cursor.execute("SELECT id_pelamar, nama_pelamar, email_pelamar, alamat_pelamar, pengalaman, pendidikan FROM pelamar WHERE id_pelamar =  %s",(userId,))
+        profile = cursor.fetchone()
+        if profile:
+            dictio = userProfile(profile)
+            # dictio.update({'message':'Login Successful','success':True})
+            response = make_response(jsonify(dictio))
+            response.status_code=200
+            return response
+        else:
+            dictio = {'message':'Profile not found','success':False}
+            response = make_response(jsonify(dictio))
+            response.status_code=404
+            return response
+    except Exception as e:
+        print(str(e))
+        response = make_response(jsonify({'message': 'an error has ocuured', 'error': str(e), 'success': False}))
+        response.status_code=500
+        return response
+
+@app.route('/getCompanyById',methods=['GET'])
+def getCompanyById():
+    companyId = request.args.get('id_perusahaan')
+    try:
+        cursor.execute("SELECT id_perusahaan,nama_perusahaan,email_perusahaan,deskripsi_perusahaan,alamat_perusahaan FROM perusahaan\
+                       WHERE id_perusahaan = %s",(companyId,))
+        profile = cursor.fetchone()
+        if profile:
+            dictio = companyProfile(profile)
+            # dictio.update({'message':'Login Successful','success':True})
+            response = make_response(jsonify(dictio))
+            response.status_code=200
+            return response
+        else:
+            dictio = {'message':'Profile not found','success':False}
+            response = make_response(jsonify(dictio))
+            response.status_code=404
+            return response
+    except Exception as e:
+        print(str(e))
+        response = make_response(jsonify({'message': 'an error has ocuured', 'error': str(e), 'success': False}))
+        response.status_code=500
+        return response
+
+
 
 ## Run The App
 if __name__ == '__main__':
