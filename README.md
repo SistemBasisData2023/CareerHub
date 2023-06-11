@@ -91,8 +91,8 @@ Proyek ini menggunakan basis data PostgreSQL dengan beberapa tabel yang digunaka
 
   ```ERD:```
 
-![alt text](![ERD](https://github.com/SistemBasisData2023/CareerHub/assets/88435892/abd1858d-c9b4-406e-b24e-67913c36553b)
-)
+![ERD](https://github.com/SistemBasisData2023/CareerHub/assets/88435892/abd1858d-c9b4-406e-b24e-67913c36553b)
+
 
 ```UML:```
 
@@ -106,18 +106,17 @@ Proyek ini menggunakan basis data PostgreSQL dengan beberapa tabel yang digunaka
 
   ```Flowchart of User```
 
-![alt text](![flowchart_user](https://github.com/SistemBasisData2023/CareerHub/assets/88435892/cb1f3459-8ae7-4df8-bb21-1c9d6bfd8905))
+![flowchart_user](https://github.com/SistemBasisData2023/CareerHub/assets/88435892/cb1f3459-8ae7-4df8-bb21-1c9d6bfd8905)
 
 ```Flowchart of Company```
 
-![alt text](![flowchart_company](https://github.com/SistemBasisData2023/CareerHub/assets/88435892/0f050644-8d36-45bd-9f8b-63a96dc11eb3))
+![flowchart_company](https://github.com/SistemBasisData2023/CareerHub/assets/88435892/0f050644-8d36-45bd-9f8b-63a96dc11eb3)
 
 </details>
 
 
 ---
 ```Logo CareerHub```
-![alt text](![logoCareerHub](https://github.com/SistemBasisData2023/CareerHub/assets/88435892/421ad99e-9f24-4c4f-a8d8-617a3dd79e13)
-)
+![logoCareerHub](https://github.com/SistemBasisData2023/CareerHub/assets/88435892/421ad99e-9f24-4c4f-a8d8-617a3dd79e13)
 
 ---
