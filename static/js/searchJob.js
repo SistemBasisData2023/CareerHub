@@ -1,6 +1,20 @@
 document.getElementById("searchButton").addEventListener("click", searchData);
 document.addEventListener('DOMContentLoaded',loadDefaultList)
 
+document.addEventListener('DOMContentLoaded', function() {
+  // Mengambil elemen tombol "Search A Job"
+  var searchButton = document.querySelector(".btn-secondary");
+
+  // Mengambil elemen bagian "Search Start"
+  var searchSection = document.getElementById("searchSection");
+
+  // Mengontrol scroll ke elemen "Search Start" saat tombol ditekan
+  searchButton.addEventListener("click", function(event) {
+      event.preventDefault();
+      searchSection.scrollIntoView({ behavior: "smooth" });
+  });
+});
+
 //function untuk me-load halaman 
 function redirectToJobDetail(id_pekerjaan) {
   localStorage.setItem("id_pekerjaan", id_pekerjaan)

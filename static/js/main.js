@@ -2,17 +2,6 @@ document.getElementById("logoutButton").addEventListener("click",clearLocalStora
 
 document.addEventListener('DOMContentLoaded', function() {
     setTimeout(loadProfileName, 10); // Menunda eksekusi selama 1 detik (1000 milidetik)
-    // Mengambil elemen tombol "Search A Job"
-    var searchButton = document.querySelector(".btn-secondary");
-
-    // Mengambil elemen bagian "Search Start"
-    var searchSection = document.getElementById("searchSection");
-
-    // Mengontrol scroll ke elemen "Search Start" saat tombol ditekan
-    searchButton.addEventListener("click", function(event) {
-        event.preventDefault();
-        searchSection.scrollIntoView({ behavior: "smooth" });
-    });
 });
 
 

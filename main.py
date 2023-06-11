@@ -296,7 +296,6 @@ def searchJob():
         response.status_code=500
         return response
 
-#ini mungkin berubah
 @app.route('/getJobDetail', methods = ['POST'])   #GET
 def getJobDetail():
     # data = request.get_json()
@@ -305,16 +304,17 @@ def getJobDetail():
     print(jobId)
     
     query = f"SELECT pekerjaan.id_pekerjaan, pekerjaan.posisi, pekerjaan.deskripsi_pekerjaan,pekerjaan.kualifikasi,\
-              pekerjaan.gaji,perusahaan.nama_perusahaan,kategori.nama_kategori,perusahaan.deskripsi_perusahaan FROM pekerjaan\
+              pekerjaan.gaji,perusahaan.nama_perusahaan,kategori.nama_kategori,perusahaan.deskripsi_perusahaan  FROM pekerjaan\
                 INNER JOIN perusahaan ON pekerjaan.id_perusahaan = perusahaan.id_perusahaan\
-                INNER JOIN kategori ON pekerjaan.id_kategori = kategori.id_kategori WHERE id_pekerjaan = %s"
+                INNER JOIN kategori ON pekerjaan.id_kategori = kategori.id_kategori \
+                WHERE pekerjaan.id_pekerjaan = %s"
 #deskripsi,kualifikasi, nama_perusahaan, gaji
     try:
         cursor.execute(query,(jobId,))   #ganti Query ini ntar
         jobDetails = cursor.fetchone()
         print(jobDetails)
         if jobDetails:
-            #print(jsonify(jobDetails))
+            print(jsonify(jobDetails))
             dictio = {
                 'id_pekerjaan': jobDetails[0],
                 'posisi': jobDetails[1],
@@ -700,7 +700,7 @@ def changePassCompany():
     id_perusahaan = data.get('id_perusahaan')
     oldPass =  data.get('oldPass')
     newPass = data.get('newPass')
-    query=f"UPDATE perusahaan SET password = %s WHERE id_perusahaan = %s AND password = %s"
+    query=f"UPDATE perusahaan SET pswd_perusahaan = %s WHERE id_perusahaan = %s AND pswd_perusahaan = %s"
 
     try:
         cursor.execute(query,(newPass,id_perusahaan,oldPass))

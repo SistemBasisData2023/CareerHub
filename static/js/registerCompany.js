@@ -36,6 +36,7 @@ var formData = {
       // Tangani respons dari backend
       if (data.success) {
         console.log(data)
+        alert(data.message);
         redirecttoLoginPelamar()
       } else {
         // Jika register gagal, tampilkan pesan kesalahan

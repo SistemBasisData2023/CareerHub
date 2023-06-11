@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
       document.getElementById("tanggal").style.display="none";
       document.getElementById("filename").style.display="none";
       document.getElementById("deleteContent").style.display="block";
-    }, 70); 
+    }, 500); 
   }
   else{
     setTimeout(function() {
@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
       document.getElementById("tanggal").style.display="block";
       document.getElementById("filename").style.display="block";
       document.getElementById("deleteContent").style.display="none";
-    }, 70);
+    }, 500);
   }
    
 });
@@ -50,6 +50,10 @@ function displayJobDetail() {
         jobDetailDisplay.className = "container-xxl py-5 wow fadeInUp";
         jobDetailDisplay.innerHTML = "";
         if (data.success) {
+          // document.getElementById("tanggal").value = data.tanggal_lamaran;
+          // document.getElementById("filename").value = data.filename;
+          localStorage.setItem("tanggal",data.tanggal_lamaran+data.id_pekerjaan)
+          localStorage.setItem("filename",data.filename+data.id_pekerjaan)
           // Memasukkan field posisi, deskripsi, gaji, kualifikasi, nama_perusahaan, kategori ke HTML
           jobDetailDisplay.innerHTML = `
             <div class="container">
@@ -117,7 +121,7 @@ function displayJobDetail() {
           console.log("fail at line 85");
           var message = data.message;
           console.log(message);
-          window.location.href = "http://127.0.0.1:5000/error404";
+          // window.location.href = "http://127.0.0.1:5000/error404";
         }
       })
       .catch((error) => {
@@ -125,9 +129,7 @@ function displayJobDetail() {
       });
   }
 
-
-
-  function applyJob(){
+function applyJob(){
     console.log("applyJob");
     //get data: tanggal and filename from HTML
     var id_pekerjaan = localStorage.getItem("id_pekerjaan")
@@ -150,8 +152,8 @@ function displayJobDetail() {
     .then(response => response.json())
     .then(data=>{
         if(data.success){
-            localStorage.setItem("tanggal",tanggal)
-            localStorage.setItem("filename",filename)
+          localStorage.setItem("tanggal",tanggal+id_pekerjaan)
+          localStorage.setItem("filename",filename+id_pekerjaan)
 
             document.getElementById("apply").style.display="none";
             document.getElementById("delete").style.display="block";
