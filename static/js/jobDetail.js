@@ -1,27 +1,9 @@
 document.addEventListener('DOMContentLoaded', function() {
- 
+    localStorage.removeItem("id_lamaran")
+    localStorage.removeItem("tanggal")
+    localStorage.removeItem("filename")
+
   displayJobDetail();
-  if(localStorage.getItem("id_lamaran")){
-    setTimeout(function() {
-      document.getElementById("applyJobcontent").textContent="Delete";
-      document.getElementById("delete").style.display = "block";
-      document.getElementById("apply").style.display="none";
-      document.getElementById("tanggal").style.display="none";
-      document.getElementById("filename").style.display="none";
-      document.getElementById("deleteContent").style.display="block";
-    }, 500); 
-  }
-  else{
-    setTimeout(function() {
-      // document.getElementById("applyJobcontent").textContent="Apply For The Job";
-      document.getElementById("delete").style.display = "none";
-      document.getElementById("apply").style.display="block";
-      document.getElementById("tanggal").style.display="block";
-      document.getElementById("filename").style.display="block";
-      document.getElementById("deleteContent").style.display="none";
-    }, 500);
-  }
-   
 });
 
 //save As jobDetail.js
@@ -52,12 +34,11 @@ function displayJobDetail() {
       jobDetailDisplay.innerHTML = "";
       if (data.success) {
         console.log(data);
+        // window.location.href = "";
         if(data.id_lamaran){
-          localStorage.setItem("tanggal",data.tanggal_lamaran+data.id_pekerjaan)
-          localStorage.setItem("filename",data.filename+data.id_pekerjaan)
           localStorage.setItem("id_lamaran",data.id_lamaran)
-
-          jobDetailDisplay.innerHTML = `
+         
+            jobDetailDisplay.innerHTML = `
             <div class="container">
               <div class="row gy-5 gx-4">
                 <div class="col-lg-8">
@@ -80,18 +61,9 @@ function displayJobDetail() {
                   </div>
   
                   <div class="mb-5">
-                        <h4 class="mb-4" id="applyJobcontent">Apply For The Job</h4>
-                        <p id="deleteContent">Anda telah mengirim lamaran pada tanggal ${localStorage.getItem("tanggal")} dengan file ${localStorage.getItem("filename")}.</p>
+                        <h4 class="mb-4" id="applyJobcontent">Delete</h4>
+                        <p id="deleteContent">Anda telah mengirim lamaran pada job ini.</p>
                             <div class="row g-3">
-                                <div class="col-12 col-sm-6">
-                                    <input type="text" id="tanggal" class="form-control" placeholder="Tanggal">
-                                </div>
-                                <div class="col-12 col-sm-6">
-                                    <input type="text" id="filename" class="form-control" placeholder="Filename">
-                                </div>
-                                <div class="col-12">
-                                    <button id="apply" class="btn btn-primary w-100" type="click" onclick = "applyJob()">Apply Now</button>
-                                </div>
                                 <div class="col-12">
                                     <button id="delete" class="btn btn-primary w-100" type="click" onclick = "deleteApply()" >Delete</button>
                                 </div>
@@ -142,7 +114,6 @@ function displayJobDetail() {
   
                   <div class="mb-5">
                         <h4 class="mb-4" id="applyJobcontent">Apply For The Job</h4>
-                        <p id="deleteContent">Anda telah mengirim lamaran pada tanggal ${localStorage.getItem("tanggal")} dengan file ${localStorage.getItem("filename")}.</p>
                             <div class="row g-3">
                                 <div class="col-12 col-sm-6">
                                     <input type="text" id="tanggal" class="form-control" placeholder="Tanggal">
@@ -152,10 +123,7 @@ function displayJobDetail() {
                                 </div>
                                 <div class="col-12">
                                     <button id="apply" class="btn btn-primary w-100" type="click" onclick = "applyJob()">Apply Now</button>
-                                </div>
-                                <div class="col-12">
-                                    <button id="delete" class="btn btn-primary w-100" type="click" onclick = "deleteApply()" >Delete</button>
-                                </div>
+                                </div>  
                             </div>
                     </div>
                 </div>
@@ -186,7 +154,7 @@ function displayJobDetail() {
         // Memasukkan field posisi, deskripsi, gaji, kualifikasi, nama_perusahaan, kategori ke HTML
           
           // localStorage.removeItem("id_pekerjaan");
-  
+          
         } else {
           console.log("fail at line 85");
           var message = data.message;
@@ -223,15 +191,6 @@ function applyJob(){
   .then(response => response.json())
   .then(data=>{
       if(data.success){
-          localStorage.setItem("tanggal",tanggal+id_pekerjaan)
-          localStorage.setItem("filename",filename+id_pekerjaan)
-
-          document.getElementById("apply").style.display="none";
-          document.getElementById("delete").style.display="block";
-          document.getElementById("tanggal").style.display="none";
-          document.getElementById("filename").style.display="none";
-          document.getElementById("deleteContent").style.display="block";
-          document.getElementById("applyJobcontent").textContent="Delete";   //ini di applJob() di bagian data.success
           alert("Lamaran ditambahkan")
 
           location.reload();
@@ -264,17 +223,18 @@ function deleteApply(){
   .then(response=>response.json())
   .then(data=>{
       if(data.success){
-            document.getElementById("apply").style.display="block";
-            document.getElementById("delete").style.display="none";
-            document.getElementById("apply").style.display="block";
-            document.getElementById("tanggal").style.display="block";
-            document.getElementById("filename").style.display="block";
-            document.getElementById("deleteContent").style.display="none";
-            document.getElementById("applyJobcontent").textContent="Apply For The Job";  //ini di bagian deleteApply di bagian if data.success
+            // document.getElementById("apply").style.display="block";
+            // document.getElementById("delete").style.display="none";
+            // document.getElementById("apply").style.display="block";
+            // document.getElementById("tanggal").style.display="block";
+            // document.getElementById("filename").style.display="block";
+            // document.getElementById("deleteContent").style.display="none";
+            // document.getElementById("applyJobcontent").textContent="Apply For The Job";  //ini di bagian deleteApply di bagian if data.success
 
             localStorage.removeItem("tanggal")
             localStorage.removeItem("filename")
             alert("Lamaran dihapus")
+            location.reload();
         }
         else{
             alert(data.message)
@@ -285,5 +245,10 @@ function deleteApply(){
         console.error("Error:", error);
         // Tangani kesalahan
       });
+}
 
+function clearId_lamaran(){
+  localStorage.removeItem("id_lamaran")
+  localStorage.removeItem("tanggal")
+  localStorage.removeItem("filename")
 }

@@ -96,7 +96,7 @@ Proyek ini menggunakan basis data PostgreSQL dengan beberapa tabel yang digunaka
 
 ```UML:```
 
-![alt text](![UML](https://github.com/SistemBasisData2023/CareerHub/assets/88435892/b446a6c1-1d5b-409b-8084-68b8bdeed5a1))
+![UML](https://github.com/SistemBasisData2023/CareerHub/assets/88435892/b446a6c1-1d5b-409b-8084-68b8bdeed5a1)
 
 </details>
 

@@ -14,6 +14,7 @@ function clearLocalStorage(){
         localStorage.removeItem("pengalaman")
         localStorage.removeItem("pendidikan")
         localStorage.removeItem("id_pekerjaan")
+        localStorage.removeItem("id_lamaran")
         localStorage.removeItem("tanggal")
         localStorage.removeItem("filename")
         window.location.href = "http://127.0.0.1:5000/loginPelamar";

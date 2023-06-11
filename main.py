@@ -325,8 +325,16 @@ def getJobDetail():
                         'tanggal_lamaran': letter[1],
                         'filename':letter[2]
                     }
+                #     innerdict.update({'success':True})
+                # print(innerdict)
+                # response = make_response(jsonify(innerdict))
+                # response.status_code=200
+                # return response
                 else:
-                    innerdict = None
+                    innerdict = {'message':'Tidak ada lamaran'}
+                    # response = make_response(jsonify(innerdict))
+                    # response.status_code=404
+                    # return response
             except Exception as e: # ini dijadiin error code 500?
                 print(str(e))
                 response = make_response(jsonify({'message': 'an error has ocuured', 'error': str(e),'success': False}))
