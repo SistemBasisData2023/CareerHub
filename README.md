@@ -116,7 +116,7 @@ Proyek ini menggunakan basis data PostgreSQL dengan beberapa tabel yang digunaka
 
 
 ---
-```Logo CareerHub```
+## Logo
 ![logoCareerHub](https://github.com/SistemBasisData2023/CareerHub/assets/88435892/421ad99e-9f24-4c4f-a8d8-617a3dd79e13)
 
 ---
