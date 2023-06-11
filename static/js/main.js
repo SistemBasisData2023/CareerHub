@@ -2,8 +2,18 @@ document.getElementById("logoutButton").addEventListener("click",clearLocalStora
 
 document.addEventListener('DOMContentLoaded', function() {
     setTimeout(loadProfileName, 10); // Menunda eksekusi selama 1 detik (1000 milidetik)
-});
+    // Mengambil elemen tombol "Search A Job"
+    var searchButton = document.querySelector(".btn-secondary");
 
+    // Mengambil elemen bagian "Search Start"
+    var searchSection = document.getElementById("searchSection");
+
+    // Mengontrol scroll ke elemen "Search Start" saat tombol ditekan
+    searchButton.addEventListener("click", function(event) {
+        event.preventDefault();
+        searchSection.scrollIntoView({ behavior: "smooth" });
+    });
+});
 
 
 function clearLocalStorage(){
@@ -14,6 +24,9 @@ function clearLocalStorage(){
         localStorage.removeItem("alamat_pelamar")
         localStorage.removeItem("pengalaman")
         localStorage.removeItem("pendidikan")
+        localStorage.removeItem("id_pekerjaan")
+        localStorage.removeItem("tanggal")
+        localStorage.removeItem("filename")
         window.location.href = "http://127.0.0.1:5000/loginPelamar";
     }
     if(localStorage.getItem("id_perusahaan")){
